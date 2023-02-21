@@ -1,0 +1,7 @@
+.profile__description {
+  display: grid;
+  grid-template-columns: minmax(min-content, max-content) 24px;
+  grid-template-rows: auto auto;
+  column-gap: 16px;
+  row-gap: 18px;
+}
