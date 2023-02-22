@@ -1,7 +1,17 @@
 .profile__description {
   display: grid;
-  grid-template-columns: minmax(min-content, max-content) 24px;
+  /* grid-template-columns: minmax(min-content, max-content) 24px; */
+  grid-template-columns: fit-content(350px) 24px;
   grid-template-rows: auto auto;
   column-gap: 16px;
   row-gap: 18px;
+}
+
+@media screen and (max-width: 627px) {
+  .profile__description {
+    grid-template-columns: fit-content(254px) 18px;
+    grid-template-rows: auto auto;
+    column-gap: 10px;
+    row-gap: 14px;
+  }
 }
