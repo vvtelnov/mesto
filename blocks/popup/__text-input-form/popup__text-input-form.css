@@ -1,0 +1,27 @@
+.popup__text-input-form {
+  width: 358px;
+  height: 27px;
+  border: 0 solid rgba(0, 0, 0, 0.2);
+  border-bottom-width: 1px;
+  padding: 0;
+  box-sizing: border-box;
+
+  font-style: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: #000000;
+}
+
+.popup__text-input-form:focus {
+  outline: none;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  background-color: rgba(84, 85, 98, 0.05);
+}
+
+@media screen and (max-width: 628px) {
+  .popup__text-input-form {
+    width: 238px;
+  }
+}

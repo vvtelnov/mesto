@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="./pages/index.css">
+	<title>Document</title>
+</head>
+<body class="page">
+
+	<div class="popup popup_closed">
+		<div class="popup__container">
+			<button class="popup__close-button"><img class="popup__img-close-button" src="./images/Close-Icon.svg" alt="X"></button>
+			<h2 class="popup__title">Редактировать профиль</h2>
+			<form>
+				<fieldset class="popup__edit-form">
+					<p class="popup__set-profile-title">
+						<input id="profile-title-input" type="text" class="popup__text-input-form" onfocus="this.value=''" value="">
+					</p>
+					<p class="popup__set-profile-subtitle">
+						<input id="profile-subtitle-input" type="text" class="popup__text-input-form" onfocus="this.value=''" value="">
+					</p>
+					<input type="submit" class="popup__save-button" value="Сохранить">
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	<header class="header">
+		<img class="header__logo" src="./images/mesto-logo.svg" alt="Mesto">
+	</header>
+
+	<section class="profile">
+		<div class="profile__info">
+			<img class="profile__avatar" src="images/profile-avatar.jpg" alt="Аватар">
+			<div class="profile__description">
+				<h1 class="profile__title">Жак-Ив Кусто</h1>
+				<p class="profile__subtitle">Исследователь океана</p>
+				<button class="profile__edit-button"><img class="profile__img-edit-button" src="./images/Edit-Button.svg" alt="Править"></button>
+			</div>
+		</div>
+
+		<button class="add-button">
+				<img src="./images/add-button__plus.svg" alt="+">
+		</button>
+	</section>
+
+	<section class="publications">
+		<div class="publication">
+			<img class="publication__photo" src="./images/page-img__castle.jpg" alt="Фото в профиле">
+			<div class="publication__info">
+				<h2 class="publication__title">Карачаевск</h2>
+				<button class="like-button"><img src="./images/like-button.svg" alt="Нравится"></button>
+			</div>
+		</div>
+
+		<div class="publication">
+			<img class="publication__photo" src="./images/page-img__desert.jpg" alt="Фото в профиле">
+			<div class="publication__info">
+				<h2 class="publication__title">Гора Эльбрус</h2>
+				<button class="like-button"><img src="./images/like-button.svg" alt="Нравится"></button>
+			</div>
+		</div>
+
+		<div class="publication">
+			<img class="publication__photo" src="./images/page-img__rock.jpg" alt="Фото в профиле">
+			<div class="publication__info">
+				<h2 class="publication__title">Домбай</h2>
+				<button class="like-button"><img src="./images/like-button.svg" alt="Нравится"></button>
+			</div>
+		</div>
+
+		<div class="publication">
+			<img class="publication__photo" src="./images/page-img__desert.jpg" alt="Фото в профиле">
+			<div class="publication__info">
+				<h2 class="publication__title">Гора Эльбрус</h2>
+				<button class="like-button"><img src="./images/like-button.svg" alt="Нравится"></button>
+			</div>
+		</div>
+
+		<div class="publication">
+			<img class="publication__photo" src="./images/page-img__rock.jpg" alt="Фото в профиле">
+			<div class="publication__info">
+				<h2 class="publication__title">Домбай</h2>
+				<button class="like-button"><img src="./images/like-button.svg" alt="Нравится"></button>
+			</div>
+		</div>
+
+		<div class="publication">
+			<img class="publication__photo" src="./images/page-img__castle.jpg" alt="Фото в профиле">
+			<div class="publication__info">
+				<h2 class="publication__title">Карачаево-Черкесия</h2>
+				<button class="like-button"><img src="./images/like-button.svg" alt="Нравится"></button>
+			</div>
+		</div>
+	</section>
+
+	<footer class="footer">
+		<p class="footer__copyright">© 2020 Mesto Russia</p>
+	</footer>
+	
+	<script src="./scripts/popup-edit-profile-form.js"></script>
+</body>
+</html>

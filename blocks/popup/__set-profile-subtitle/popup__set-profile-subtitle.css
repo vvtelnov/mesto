@@ -1,0 +1,15 @@
+.popup__set-profile-subtitle {
+  margin: 30px auto 48px;
+
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000000;
+}
+
+@media screen and (max-width: 628px) {
+  .popup__set-profile-subtitle {
+    margin-bottom: 45px;
+  }
+}

@@ -1,0 +1,14 @@
+.popup__edit-form {
+  margin: auto;
+  padding: 0;
+  width: 358px;
+  height: 182px;
+  border: none;
+}
+
+@media screen and (max-width: 628px) {
+  .popup__edit-form {
+    width: 238px;
+    height: 175px;
+  }
+}
