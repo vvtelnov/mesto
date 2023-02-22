@@ -1,6 +1,6 @@
 .popup__container {
   position: absolute;
-  top: 25%; 
+  top: 25%;
   left: 50%;
   transform: translate(-50%, -36%);
   width: 430px;
