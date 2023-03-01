@@ -1,6 +1,6 @@
 .publication__info {
   width: 241px;
-  height: 74.5px;
+  min-height: 74.5px;
   margin: 0 20px 0 21px;
   display: flex;
   justify-content: space-between;
