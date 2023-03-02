@@ -1,6 +1,6 @@
-.like-button {
+.publication__like-button {
   background-color: #FFFFFF;
-  background-image: url('../../images/like-button.svg');
+  background-image: url('../../../images/like-button.svg');
   border: none;
   width: 22px;
   height: 19px;
@@ -9,6 +9,6 @@
   cursor: pointer;
 }
 
-.like-button:hover {
+.publication__like-button:hover {
   opacity: 0.5;
 }

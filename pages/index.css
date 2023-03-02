@@ -36,9 +36,7 @@
 @import url(../blocks/profile/__subtitle/profile__subtitle.css);
 @import url(../blocks/profile/__edit-button/profile__edit-button.css);
 @import url(../blocks/profile/__img-edit-button/profile__img-edit-button.css);
-
-/* add-button */
-@import url(../blocks/add-button/add-button.css);
+@import url(../blocks/profile/__add-button/profile__add-button.css);
 
 /* publications */
 @import url(../blocks/publications/publications.css);
@@ -48,9 +46,7 @@
 @import url(../blocks/publication/__photo/publication__photo.css);
 @import url(../blocks/publication/__info/publication__info.css);
 @import url(../blocks/publication/__title/publication__title.css);
-
-/* like-button */
-@import url(../blocks/like-button/like-button.css);
+@import url(../blocks/publication/__like-button/publication__like-button.css);
 
 /* footer */
 @import url(../blocks/footer/footer.css);
