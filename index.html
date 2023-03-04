@@ -28,7 +28,7 @@
 		</section>
 
 		<section class="publications">
-			<article class="publication">
+			<!-- <article class="publication">
 				<img class="publication__photo" src="./images/page-img__castle.jpg" alt="Фото в профиле">
 				<div class="publication__info">
 					<h2 class="publication__title">Карачаевск</h2>
@@ -74,7 +74,7 @@
 					<h2 class="publication__title">Карачаево-Черкесия</h2>
 					<button type="button" class="publication__like-button"></button>
 				</div>
-			</article>
+			</article> -->
 		</section>
 	</main>
 
@@ -96,6 +96,16 @@
 			</form>
 		</div>
 	</div>
+
+	<template id="publication-template">
+		<article class="publication">
+			<img class="publication__photo" src="#" alt="Фото в профиле">
+			<div class="publication__info">
+				<h2 class="publication__title"></h2>
+				<button type="button" class="publication__like-button"></button>
+			</div>
+		</article>
+	</template>
 	
 	<script src="./scripts/index.js"></script>
 </body>
