@@ -63,6 +63,10 @@ function prependImageToPage (imgName, imgLink) {
   publication.querySelector('.publication__photo').src = imgLink;
   publication.querySelector('.publication__title').textContent = imgName;
 
+  publication.querySelector('.publication__like-button').addEventListener('click', evt => {
+    evt.target.classList.toggle('publication__like-button_active');
+  })
+
   publicationsNodes.prepend(publication);
 }
 
@@ -129,4 +133,5 @@ addNewPlaceFormElement.addEventListener('submit', handleFormSubmitAddNewPlace);
 
 
 addInitPubsToPage(initialPublication);
+
 

@@ -47,6 +47,7 @@
 @import url(../blocks/publication/__info/publication__info.css);
 @import url(../blocks/publication/__title/publication__title.css);
 @import url(../blocks/publication/__like-button/publication__like-button.css);
+@import url(../blocks/publication/__like-button/_active/publication__like-button_active.css);
 
 /* footer */
 @import url(../blocks/footer/footer.css);
