@@ -43,34 +43,39 @@ const pubInputLink = popupNewPlace.querySelector('#new-pub-link');
 const addNewPlaceFormElement = popupNewPlace.querySelector('form');
 
 // variables related to #popup-big-image
-const popuBigImage = document.querySelector('#popup-big-image');
+const popupZoom = document.querySelector('#popup-big-img');
+const popupZoomImage = popupZoom.querySelector('.popup__image');
+const popupZoomTitle = popupZoom.querySelector('.popup__pub-title');
 
 
 const closeButtonsNodes = document.querySelectorAll('.popup__close-button');
-// console.log(closeButtonsArr);
-
 
 const publicationsNodes = document.querySelector('.publications');
-// console.log(publicationsNodes);
 const publicationTemplate = document.querySelector('#publication-template');
 
 
 function prependImageToPage (imgName, imgLink) {
   const publication = copyTemplateContent(publicationTemplate);
+  const publicationPhoto = publication.querySelector('.publication__photo');
   imgName = String(imgName);
   imgLink = String(imgLink);
 
-  publication.querySelector('.publication__photo').src = imgLink;
+  publicationPhoto.src = imgLink;
   publication.querySelector('.publication__title').textContent = imgName;
 
   publication.querySelector('.publication__like-button').addEventListener('click', evt => {
     evt.target.classList.toggle('publication__like-button_active');
-  })
+  });
 
   publication.querySelector('.publication__delete-button').addEventListener('click', evt => {
     evt.target.closest('.publication').remove();
-  })
-
+  });
+  
+  publicationPhoto.addEventListener('click', () => {
+    popupZoom.classList.add('popup_opened');
+    popupZoomImage.src = imgLink;
+    popupZoomTitle.textContent = imgName;
+  });
 
   publicationsNodes.prepend(publication);
 }

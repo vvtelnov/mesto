@@ -9,6 +9,7 @@
 /* ::after solves this problem */
 .publication::after {
   content: '';
+  pointer-events: none;
   position: absolute;
   width: 282px;
   height: 282px;
