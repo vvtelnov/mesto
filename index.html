@@ -28,8 +28,8 @@
 		</section>
 
 		<section class="publications">
-			<article class="publication">
-				<img class="publication__photo" src="./images/page-img__castle.jpg" alt="Фото в профиле">
+			<!-- <article class="publication">
+				<img class="publication__photo" src="./images/page-img__rock.jpg" alt="Фото в профиле">
 				<div class="publication__info">
 					<h2 class="publication__title">Карачаевск</h2>
 					<button type="button" class="publication__like-button"></button>
@@ -74,7 +74,7 @@
 					<h2 class="publication__title">Карачаево-Черкесия</h2>
 					<button type="button" class="publication__like-button"></button>
 				</div>
-			</article>
+			</article> -->
 		</section>
 	</main>
 
@@ -83,7 +83,7 @@
 		<p class="footer__copyright">© 2020 Mesto Russia</p>
 	</footer>
 
-	<div class="popup">
+	<div id="popup-edit-profile" class="popup">
 		<div class="popup__container">
 			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="./images/close-icon.svg" alt="Х"></button>
 			<h2 class="popup__title">Редактировать профиль</h2>
@@ -96,6 +96,40 @@
 			</form>
 		</div>
 	</div>
+
+	<div id="popup-new-place" class="popup">
+		<div class="popup__container">
+			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="./images/close-icon.svg" alt="Х"></button>
+			<h2 class="popup__title">Новое место</h2>
+			<form name="add-new-publication">
+				<fieldset class="popup__edit-form-container">
+					<input name="publication-name" required placeholder="Название" id="new-pub-name" type="text" class="popup__text-input-form" value="">
+					<input name="publication-img-link" required placeholder="Ссылка на картинку" id="new-pub-link" type="text" class="popup__text-input-form" value="">
+					<input name="publication-create-button" type="submit" class="popup__save-button" value="Создать">
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	<div id="popup-big-img" class="popup popup_zoom-img">
+		<div class="popup__zoom-container">
+			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="./images/close-icon.svg" alt="Х"></button>
+			<img class="popup__image" src="#" alt="Фото в профиле">
+			<h2 class="popup__pub-title"></h2>
+		</div>
+	</div>
+	
+
+	<template id="publication-template">
+		<article class="publication">
+			<img class="publication__photo" src="#" alt="Фото в профиле">
+			<div class="publication__info">
+				<h2 class="publication__title"></h2>
+				<button type="button" class="publication__like-button"></button>
+			</div>
+			<button type="button" class="publication__delete-button"></button>
+		</article>
+	</template>
 	
 	<script src="./scripts/index.js"></script>
 </body>

@@ -2,4 +2,27 @@
   width: 100%;
   background: #FFFFFF;
   border-radius: 10px;
+  position: relative;
 }
+
+/* There is a defficulties to see delete button if background is primary white  */
+/* ::after solves this problem */
+.publication::after {
+  content: '';
+  pointer-events: none;
+  position: absolute;
+  width: 282px;
+  height: 282px;
+  border-radius: 10px;
+  background: #2A2C2F;
+  opacity: .2;
+  /* z-index: 1; */
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0
+}
+
+/* .publication:hover::after {
+  opacity: 0.5;
+} */

@@ -15,6 +15,7 @@
 /* @import url(../blocks/popup/_opened/popup_opened.css); */
 @import url(../blocks/popup/popup.css);
 @import url(../blocks/popup/_opened/popup_opened.css);
+@import url(../blocks/popup/_zoom-img/popup_zoom-img.css);
 @import url(../blocks/popup/__container/popup__container.css);
 @import url(../blocks/popup/__close-button/popup__close-button.css);
 @import url(../blocks/popup/__img-close-button/popup__img-close-button.css);
@@ -22,6 +23,9 @@
 @import url(../blocks/popup/__save-button/popup__save-button.css);
 @import url(../blocks/popup/__edit-form-container/popup__edit-form-container.css);
 @import url(../blocks/popup/__text-input-form/popup__text-input-form.css);
+@import url(../blocks/popup/__zoom-container/popup__zoom-container.css);
+@import url(../blocks/popup/__image/popup__image.css);
+@import url(../blocks/popup/__pub-title/popup__pub-title.css);
 
 /* header */
 @import url(../blocks/header/header.css);
@@ -47,6 +51,8 @@
 @import url(../blocks/publication/__info/publication__info.css);
 @import url(../blocks/publication/__title/publication__title.css);
 @import url(../blocks/publication/__like-button/publication__like-button.css);
+@import url(../blocks/publication/__like-button/_active/publication__like-button_active.css);
+@import url(../blocks/publication/__delete-button/publication__delete-button.css);
 
 /* footer */
 @import url(../blocks/footer/footer.css);
