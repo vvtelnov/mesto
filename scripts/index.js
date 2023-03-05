@@ -67,6 +67,11 @@ function prependImageToPage (imgName, imgLink) {
     evt.target.classList.toggle('publication__like-button_active');
   })
 
+  publication.querySelector('.publication__delete-button').addEventListener('click', evt => {
+    evt.target.closest('.publication').remove();
+  })
+
+
   publicationsNodes.prepend(publication);
 }
 
@@ -98,7 +103,7 @@ function openNewPlacePopup() {
 
 function handleFormSubmitEditProfile(evt) {
   // This funct. closes form and changes profile__title and profile__subtitle with input values.
-  const thisPopup = evt.target.parentElement.parentElement;
+  const thisPopup = evt.target.closest('.popup');
   evt.preventDefault();
   
   profileTitle.textContent = titleInput.value;
@@ -108,7 +113,7 @@ function handleFormSubmitEditProfile(evt) {
 
 function handleFormSubmitAddNewPlace(evt) {
     // This funct. closes form and addes new publication (place) with input values.
-    const thisPopup = evt.target.parentElement.parentElement;
+    const thisPopup = evt.target.closest('.popup');
     evt.preventDefault();
 
     prependImageToPage(pubInputName.value, pubInputLink.value);
@@ -123,7 +128,7 @@ addButton.addEventListener('click', openNewPlacePopup);
 // closeButton is a Nodes collection, so this EventListener applies to every close button (X) on the page.
 closeButtonsNodes.forEach(iCloseButton => {
   iCloseButton.addEventListener('click', evt => {
-    const thisPopup = evt.target.parentElement.parentElement.parentElement;
+    const thisPopup = evt.target.closest('.popup');
     closePopup(thisPopup);
   });
 });
