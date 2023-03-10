@@ -1,5 +1,7 @@
 .publication__photo {
   /* width: 100%; */
+  display: block;
+  color: black;
   width: 282px;
   height: 282px;
   border-top-left-radius: inherit;
