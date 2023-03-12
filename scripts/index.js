@@ -80,7 +80,7 @@ function createCard(imgName, imgLink) { // (returns cardElement)
   });
   
   cardPhoto.addEventListener('click', () => {
-    popupZoom.classList.add('popup_opened');
+    openPopup(popupZoom);
     popupZoomImage.src = imgLink;
     popupZoomImage.alt = imgName;
     popupZoomTitle.textContent = imgName;
