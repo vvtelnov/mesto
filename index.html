@@ -39,11 +39,20 @@
 		<div class="popup__container">
 			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="./images/close-icon.svg" alt="Х"></button>
 			<h2 class="popup__title">Редактировать профиль</h2>
-			<form name="edit-profile">
+			<form name="edit-profile" novalidate>
 				<fieldset class="popup__edit-form-container">
-					<input name="profile-title" required placeholder="Ваше имя" id="profile-title-input" type="text" class="popup__text-input-form" value="">
-					<input name="profile-subtitle" placeholder="Ваша професия" id="profile-subtitle-input" type="text" class="popup__text-input-form" value="">
-					<input name="profile-save-button" type="submit" class="popup__save-button" value="Сохранить">
+					
+					<lable class="popup__form-field">
+						<input name="profile-title" required minlength="2" maxlength="40" placeholder="Ваше имя" id="profile-title-input" type="text" class="popup__text-input-form" value="">
+						<span class="profile-title-input-error popup__input-error">привет, я ошибка</span>
+					</lable>
+					
+					<lable class="popup__form-field">
+						<input name="profile-subtitle" required minlength="2" maxlength="200" placeholder="Ваша професия" id="profile-subtitle-input" type="text" class="popup__text-input-form" value="">
+						<span class="profile-subtitle-input-error popup__input-error">привет, я ошибка</span>
+					</lable>
+					
+					<button name="profile-save-button" type="submit" class="popup__save-button">Сохранить</button>
 				</fieldset>
 			</form>
 		</div>
@@ -53,11 +62,20 @@
 		<div class="popup__container">
 			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="./images/close-icon.svg" alt="Х"></button>
 			<h2 class="popup__title">Новое место</h2>
-			<form name="add-new-publication">
+			<form name="add-new-publication" novalidate>
 				<fieldset class="popup__edit-form-container">
-					<input name="publication-name" required placeholder="Название" id="new-pub-name" type="text" class="popup__text-input-form" value="">
-					<input name="publication-img-link" required placeholder="Ссылка на картинку" id="new-pub-link" type="text" class="popup__text-input-form" value="">
-					<input name="publication-create-button" type="submit" class="popup__save-button" value="Создать">
+					
+					<lable class="popup__form-field">
+						<input name="publication-name" required minlength="2" maxlength="30" placeholder="Название" id="new-pub-name" type="text" class="popup__text-input-form" value="">
+						<span class="new-pub-name-error popup__input-error">привет, я ошибка</span>
+					</lable>
+					
+					<lable class="popup__form-field">
+						<input name="publication-img-link" required type="url" placeholder="Ссылка на картинку" id="new-pub-link" type="text" class="popup__text-input-form" value="">
+						<span class="new-pub-link-error popup__input-error">привет, я ошибка</span>
+					</lable>
+
+					<button name="publication-create-button" type="submit" class="popup__save-button">Создать</button>
 				</fieldset>
 			</form>
 		</div>

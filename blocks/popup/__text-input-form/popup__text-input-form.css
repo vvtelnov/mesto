@@ -5,17 +5,13 @@
   border-bottom-width: 1px;
   padding: 0;
   box-sizing: border-box;
-  margin-bottom: 30px;
+  margin-bottom: 5px;
 
   font-style: normal;
   font-weight: 400;
   font-size: 14px;
   line-height: 17px;
   color: #000000;
-}
-
-.popup__text-input-form:nth-last-of-type(2) {
-  margin: 0;
 }
 
 .popup__text-input-form:focus {

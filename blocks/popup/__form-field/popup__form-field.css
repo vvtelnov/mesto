@@ -1,0 +1,8 @@
+.popup__form-field {
+  display: block;
+  margin-bottom: 13px;
+}
+
+.popup__form-field:nth-last-of-type(1) {
+  margin-bottom: 0px;
+}
