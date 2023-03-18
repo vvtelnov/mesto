@@ -150,9 +150,6 @@ function isFormValid(form) { // (returns boolean)
   const arr = Array.from(form.querySelectorAll('.popup__text-input-form'));
 
   return arr.every(iFormInput => {
-    // console.log(`${iFormInput.name}: ${iFormInput.validity.valid}`)
-    // console.log(iFormInput.validity)
-    // console.log('____________')
     return isFormInputValid(iFormInput) 
   })
 }
@@ -238,7 +235,6 @@ closeButtonsNodes.forEach(iCloseButton => {
   });
 });
 
-// TODO: вынести в глобольную переменную 
 Array.from(document.forms).forEach(iForm => {
   iForm.addEventListener('input', evt => {
     const currForm = evt.currentTarget;
