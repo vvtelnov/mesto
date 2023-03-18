@@ -101,11 +101,31 @@ function copyTemplateContent(template) { // (returns templateCopy)
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('keydown', closePopupIfEscPressed);
+  popup.addEventListener('click', closePopupIfOutsidePopupClicked);
 }
+
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closePopupIfEscPressed);
+  popup.addEventListener('click', closePopupIfOutsidePopupClicked);
 }
+
+function closePopupIfEscPressed(event) {
+  if (event.key === 'Escape' || event.key == 'Esc')  {
+    closePopup(document.querySelector('.popup_opened'));
+  }
+}
+
+function closePopupIfOutsidePopupClicked(event) {
+  const thisPopupContainer = event.target.querySelector('.popup__container') || event.target.querySelector('.popup__zoom-container');
+
+  if (event.target.contains(thisPopupContainer)) {
+    closePopup(event.target);
+  }
+}
+
 
 function handleFormSubmitEditProfile(evt) {
   // This funct. closes form and changes profile__title and profile__subtitle with input values.
@@ -197,7 +217,6 @@ function disableSubmit(form) {
   }
 }
 
-
 editButton.addEventListener('click', () => {
   // To insert the modified data into the popup
   titleInput.value = profileTitle.textContent;
@@ -232,5 +251,3 @@ Array.from(document.forms).forEach(iForm => {
 
 
 addInitPubsToPage(initialPublications);
-
-
