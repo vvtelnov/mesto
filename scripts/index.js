@@ -34,7 +34,7 @@ const profileSubtitle = document.querySelector('.profile__subtitle');
 const titleInput = popupEditProfile.querySelector('#profile-title-input');
 const subtitleInput = popupEditProfile.querySelector('#profile-subtitle-input');
 const editProfileFormElement = document.forms['edit-profile'];
-
+const editProfileSaveButton = editProfileFormElement.elements['profile-save-button'];
 
 // variables related to #popup-new-place
 const popupNewPlace = document.querySelector('#popup-new-place');
@@ -42,7 +42,7 @@ const addButton = document.querySelector('.profile__add-button');
 const pubInputName = popupNewPlace.querySelector('#new-pub-name');
 const pubInputLink = popupNewPlace.querySelector('#new-pub-link');
 const addNewPlaceFormElement = document.forms['add-new-publication'];
-
+const newPlaceSaveButton = addNewPlaceFormElement.elements['publication-create-button'];
 
 // variables related to #popup-big-image
 const popupZoom = document.querySelector('#popup-big-img');
@@ -101,11 +101,31 @@ function copyTemplateContent(template) { // (returns templateCopy)
 
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('keydown', closePopupIfEscPressed);
+  popup.addEventListener('click', closePopupIfOutsidePopupClicked);
 }
+
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closePopupIfEscPressed);
+  popup.addEventListener('click', closePopupIfOutsidePopupClicked);
 }
+
+function closePopupIfEscPressed(event) {
+  if (event.key === 'Escape' || event.key == 'Esc')  {
+    closePopup(document.querySelector('.popup_opened'));
+  }
+}
+
+function closePopupIfOutsidePopupClicked(event) {
+  const thisPopupContainer = event.target.querySelector('.popup__container') || event.target.querySelector('.popup__zoom-container');
+
+  if (event.target.contains(thisPopupContainer)) {
+    closePopup(event.target);
+  }
+}
+
 
 function handleFormSubmitEditProfile(evt) {
   // This funct. closes form and changes profile__title and profile__subtitle with input values.
@@ -125,13 +145,85 @@ function handleFormSubmitAddNewPlace(evt) {
     addNewPlaceFormElement.reset();
 }
 
+function isFormValid(form) { // (returns boolean)
+  // We use querySelector because names are unique for every input element so we can't use form.elements
+  const arr = Array.from(form.querySelectorAll('.popup__text-input-form'));
+
+  return arr.every(iFormInput => {
+    return isFormInputValid(iFormInput) 
+  })
+}
+
+function isFormInputValid(formInput) { // (returns boolean)
+  return formInput.validity.valid
+}
+
+function validateForm(form) {
+  if (isFormValid(form)) {
+    enableSubmit(form);
+  } else {
+    disableSubmit(form);
+  };
+};
+
+function validateInput(form, formInput) {
+  if (isFormInputValid(formInput)) {
+    hideInputError(form, formInput);
+  } else {
+    showInputError(form, formInput);
+  };
+};
+
+function showInputError(form, inputElement) {
+  // errorMsg is a span element with unic class name which mathes inputElement.id + "-error".
+  const errorMsg = form.querySelector(`.${inputElement.id}-error`);
+  errorMsg.classList.add('popup__input-error_shown');
+  errorMsg.textContent = inputElement.validationMessage;
+  inputElement.classList.add('popup__text-input-form_error-shown');
+}
+
+function hideInputError(form, inputElement) {
+  // errorMsg is a span element with unic class name which mathes inputElement.id + "-error".
+  const errorMsg = form.querySelector(`.${inputElement.id}-error`);
+  errorMsg.classList.remove('popup__input-error_shown');
+  errorMsg.textContent = '';
+  inputElement.classList.remove('popup__text-input-form_error-shown');
+}
+
+function enableSubmit(form) {
+  if (form.name === 'edit-profile') {
+    editProfileSaveButton.classList.remove('popup__save-button_disabled');
+    editProfileSaveButton.removeAttribute('disabled', true);
+    editProfileFormElement.addEventListener('submit', handleFormSubmitEditProfile);
+  } else if (form.name === 'add-new-publication') {
+    newPlaceSaveButton.classList.remove('popup__save-button_disabled');
+    newPlaceSaveButton.removeAttribute('disabled', true);
+    addNewPlaceFormElement.addEventListener('submit', handleFormSubmitAddNewPlace);
+  }
+}
+
+function disableSubmit(form) {
+  if (form.name === 'edit-profile') {
+    editProfileSaveButton.classList.add('popup__save-button_disabled');
+    editProfileSaveButton.setAttribute('disabled', true);
+    editProfileFormElement.removeEventListener('submit', handleFormSubmitEditProfile);
+  } else if (form.name === 'add-new-publication') {
+    newPlaceSaveButton.classList.add('popup__save-button_disabled');
+    newPlaceSaveButton.setAttribute('disabled', true);
+    addNewPlaceFormElement.removeEventListener('submit', handleFormSubmitAddNewPlace);
+  }
+}
+
 editButton.addEventListener('click', () => {
   // To insert the modified data into the popup
   titleInput.value = profileTitle.textContent;
   subtitleInput.value = profileSubtitle.textContent;
+  validateForm(editProfileFormElement);
   openPopup(popupEditProfile);
 });
+
 addButton.addEventListener('click', () => {
+  validateForm(addNewPlaceFormElement);
   openPopup(popupNewPlace);
 }); 
 
@@ -143,8 +235,15 @@ closeButtonsNodes.forEach(iCloseButton => {
   });
 });
 
-editProfileFormElement.addEventListener('submit', handleFormSubmitEditProfile);
-addNewPlaceFormElement.addEventListener('submit', handleFormSubmitAddNewPlace);
+Array.from(document.forms).forEach(iForm => {
+  iForm.addEventListener('input', evt => {
+    const currForm = evt.currentTarget;
+    const currInputField = evt.target;
+
+    validateForm(currForm);
+    validateInput(currForm, currInputField);
+  });
+});
 
 
 addInitPubsToPage(initialPublications);
