@@ -49,12 +49,19 @@ const popupZoom = document.querySelector('#popup-big-img');
 const popupZoomImage = popupZoom.querySelector('.popup__image');
 const popupZoomTitle = popupZoom.querySelector('.popup__pub-title');
 
-
 const closeButtonsNodes = document.querySelectorAll('.popup__close-button');
 
 const publicationsNodes = document.querySelector('.publications');
 const publicationTemplate = document.querySelector('#publication-template');
 
+const validationConfig = {
+  formElement: '.popup__form',
+  inputElement: '.popup__text-input-form',
+  buttonElement: '.popup__save-button',
+  inactiveButtonClass: 'popup__save-button_disabled',
+  inputErrorClass: 'popup__text-input-form_error-shown',
+  errorClass: 'popup__input-error_shown'
+};
 
 function prependImageToPage(pubName, pubPhotoLink) {
   const publication = createCard(pubName, pubPhotoLink)
@@ -71,10 +78,11 @@ function createCard(imgName, imgLink) { // (returns cardElement)
   cardPhoto.alt = imgName;
   cardElement.querySelector('.publication__title').textContent = imgName;
 
+  //TODO: Сдесь можно упростиь код с помощью всплавания и делегации
   cardElement.querySelector('.publication__like-button').addEventListener('click', evt => {
     evt.target.classList.toggle('publication__like-button_active');
   });
-
+  // TODO: здесь тоже самое
   cardElement.querySelector('.publication__delete-button').addEventListener('click', evt => {
     evt.target.closest('.publication').remove();
   });
@@ -109,19 +117,17 @@ function openPopup(popup) {
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', closePopupIfEscPressed);
-  popup.addEventListener('click', closePopupIfOutsidePopupClicked);
+  popup.removeEventListener('click', closePopupIfOutsidePopupClicked);
 }
 
 function closePopupIfEscPressed(event) {
-  if (event.key === 'Escape' || event.key == 'Esc')  {
+  if (event.key === 'Escape' || event.key === 'Esc')  {
     closePopup(document.querySelector('.popup_opened'));
   }
 }
 
 function closePopupIfOutsidePopupClicked(event) {
-  const thisPopupContainer = event.target.querySelector('.popup__container') || event.target.querySelector('.popup__zoom-container');
-
-  if (event.target.contains(thisPopupContainer)) {
+  if (event.target.classList.contains('popup_opened')) {
     closePopup(event.target);
   }
 }
@@ -136,6 +142,8 @@ function handleFormSubmitEditProfile(evt) {
   closePopup(popupEditProfile);
 }
 
+editProfileFormElement.addEventListener('submit', handleFormSubmitEditProfile);
+
 function handleFormSubmitAddNewPlace(evt) {
     // This funct. closes form and addes new publication (place) with input values.
     evt.preventDefault();
@@ -145,103 +153,26 @@ function handleFormSubmitAddNewPlace(evt) {
     addNewPlaceFormElement.reset();
 }
 
-function isFormValid(form) { // (returns boolean)
-  // We use querySelector because names are unique for every input element so we can't use form.elements
-  const arr = Array.from(form.querySelectorAll('.popup__text-input-form'));
-
-  return arr.every(iFormInput => {
-    return isFormInputValid(iFormInput) 
-  })
-}
-
-function isFormInputValid(formInput) { // (returns boolean)
-  return formInput.validity.valid
-}
-
-function validateForm(form) {
-  if (isFormValid(form)) {
-    enableSubmit(form);
-  } else {
-    disableSubmit(form);
-  };
-};
-
-function validateInput(form, formInput) {
-  if (isFormInputValid(formInput)) {
-    hideInputError(form, formInput);
-  } else {
-    showInputError(form, formInput);
-  };
-};
-
-function showInputError(form, inputElement) {
-  // errorMsg is a span element with unic class name which mathes inputElement.id + "-error".
-  const errorMsg = form.querySelector(`.${inputElement.id}-error`);
-  errorMsg.classList.add('popup__input-error_shown');
-  errorMsg.textContent = inputElement.validationMessage;
-  inputElement.classList.add('popup__text-input-form_error-shown');
-}
-
-function hideInputError(form, inputElement) {
-  // errorMsg is a span element with unic class name which mathes inputElement.id + "-error".
-  const errorMsg = form.querySelector(`.${inputElement.id}-error`);
-  errorMsg.classList.remove('popup__input-error_shown');
-  errorMsg.textContent = '';
-  inputElement.classList.remove('popup__text-input-form_error-shown');
-}
-
-function enableSubmit(form) {
-  if (form.name === 'edit-profile') {
-    editProfileSaveButton.classList.remove('popup__save-button_disabled');
-    editProfileSaveButton.removeAttribute('disabled', true);
-    editProfileFormElement.addEventListener('submit', handleFormSubmitEditProfile);
-  } else if (form.name === 'add-new-publication') {
-    newPlaceSaveButton.classList.remove('popup__save-button_disabled');
-    newPlaceSaveButton.removeAttribute('disabled', true);
-    addNewPlaceFormElement.addEventListener('submit', handleFormSubmitAddNewPlace);
-  }
-}
-
-function disableSubmit(form) {
-  if (form.name === 'edit-profile') {
-    editProfileSaveButton.classList.add('popup__save-button_disabled');
-    editProfileSaveButton.setAttribute('disabled', true);
-    editProfileFormElement.removeEventListener('submit', handleFormSubmitEditProfile);
-  } else if (form.name === 'add-new-publication') {
-    newPlaceSaveButton.classList.add('popup__save-button_disabled');
-    newPlaceSaveButton.setAttribute('disabled', true);
-    addNewPlaceFormElement.removeEventListener('submit', handleFormSubmitAddNewPlace);
-  }
-}
+addNewPlaceFormElement.addEventListener('submit', handleFormSubmitAddNewPlace);
 
 editButton.addEventListener('click', () => {
   // To insert the modified data into the popup
   titleInput.value = profileTitle.textContent;
+  toggleInputErrorMsg(editProfileFormElement, titleInput, validationConfig);
   subtitleInput.value = profileSubtitle.textContent;
-  validateForm(editProfileFormElement);
+  toggleInputErrorMsg(editProfileFormElement, subtitleInput, validationConfig);
   openPopup(popupEditProfile);
 });
 
 addButton.addEventListener('click', () => {
-  validateForm(addNewPlaceFormElement);
   openPopup(popupNewPlace);
-}); 
+});
 
 // closeButton is a Nodes collection, so this EventListener applies to every close button (X) on the page.
 closeButtonsNodes.forEach(iCloseButton => {
   const closestPopup = iCloseButton.closest('.popup');
   iCloseButton.addEventListener('click', () => {
     closePopup(closestPopup);
-  });
-});
-
-Array.from(document.forms).forEach(iForm => {
-  iForm.addEventListener('input', evt => {
-    const currForm = evt.currentTarget;
-    const currInputField = evt.target;
-
-    validateForm(currForm);
-    validateInput(currForm, currInputField);
   });
 });
 
