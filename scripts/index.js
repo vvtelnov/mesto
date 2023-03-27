@@ -151,6 +151,7 @@ function handleFormSubmitAddNewPlace(evt) {
     prependImageToPage(pubInputName.value, pubInputLink.value);
     closePopup(popupNewPlace);
     addNewPlaceFormElement.reset();
+    toggleButtonState(newPlaceSaveButton, addNewPlaceFormElement.checkValidity(), validationConfig);
 }
 
 addNewPlaceFormElement.addEventListener('submit', handleFormSubmitAddNewPlace);
