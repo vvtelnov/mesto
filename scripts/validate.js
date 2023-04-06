@@ -1,4 +1,9 @@
-function enableValidation(config) {
+import { validationConfig as config } from './index.js'
+import { FormValidator } from './FormValidator.js'
+
+
+
+export function enableValidation(config) {
   const formArr = Array.from(document.querySelectorAll(config.formElement));
   formArr.forEach(iForm => {
     setInputListeners(iForm, config);
@@ -58,4 +63,3 @@ function hideInputError(form, inputElement, config) {
 }
 
 
-enableValidation(validationConfig);
