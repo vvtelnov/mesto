@@ -1,3 +1,7 @@
+import Card from './Card.js';
+import FormValidator from './FormValidator.js';
+
+
 // This is a array of cards that appears on the page when first opened or reloaded.
 const initialPublications = [
   {
@@ -45,16 +49,25 @@ const addNewPlaceFormElement = document.forms['add-new-publication'];
 const newPlaceSaveButton = addNewPlaceFormElement.elements['publication-create-button'];
 
 // variables related to #popup-big-image
-const popupZoom = document.querySelector('#popup-big-img');
-const popupZoomImage = popupZoom.querySelector('.popup__image');
-const popupZoomTitle = popupZoom.querySelector('.popup__pub-title');
+export const popupZoom = document.querySelector('#popup-big-img');
+export const popupZoomImage = popupZoom.querySelector('.popup__image');
+export const popupZoomTitle = popupZoom.querySelector('.popup__pub-title');
 
 const closeButtonsNodes = document.querySelectorAll('.popup__close-button');
 
-const publicationsNodes = document.querySelector('.publications');
-const publicationTemplate = document.querySelector('#publication-template');
+export const publicationsNodes = document.querySelector('.publications');
+export const publicationTemplate = document.querySelector('#publication-template');
 
-const validationConfig = {
+const formsObj = {
+  // example of this obj data struct: {formName: instance of class FormValidator}
+  // based on page current forms, keys of this obj after calling funct fillFormsObj() are following:
+  // {
+    // add-new-publication: this instance class FormValidator,
+    // edit-profile: this instance class FormValidator,
+  // }
+}
+
+export const validationConfig = {
   formElement: '.popup__form',
   inputElement: '.popup__text-input-form',
   buttonElement: '.popup__save-button',
@@ -63,38 +76,24 @@ const validationConfig = {
   errorClass: 'popup__input-error_shown'
 };
 
-function prependImageToPage(pubName, pubPhotoLink) {
-  const publication = createCard(pubName, pubPhotoLink)
-  publicationsNodes.prepend(publication);
+function fillFormsObj() {
+  const formArr = Array.from(document.querySelectorAll(validationConfig.formElement));
+
+  formArr.forEach(iForm  => {
+  const formInstance = new FormValidator(validationConfig, iForm);
+  formsObj[iForm.name] = formInstance;
+  });
+};
+
+function enableAllFormsValidation() {
+  for (const formNameKey in formsObj) {
+    formsObj[formNameKey].enableValidation();
+  }
 }
 
-function createCard(imgName, imgLink) { // (returns cardElement)
-  const cardElement = copyTemplateContent(publicationTemplate);
-  const cardPhoto = cardElement.querySelector('.publication__photo');
-  imgName = String(imgName);
-  imgLink = String(imgLink);
-
-  cardPhoto.src = imgLink;
-  cardPhoto.alt = imgName;
-  cardElement.querySelector('.publication__title').textContent = imgName;
-
-  //TODO: Сдесь можно упростиь код с помощью всплавания и делегации
-  cardElement.querySelector('.publication__like-button').addEventListener('click', evt => {
-    evt.target.classList.toggle('publication__like-button_active');
-  });
-  // TODO: здесь тоже самое
-  cardElement.querySelector('.publication__delete-button').addEventListener('click', evt => {
-    evt.target.closest('.publication').remove();
-  });
-  
-  cardPhoto.addEventListener('click', () => {
-    openPopup(popupZoom);
-    popupZoomImage.src = imgLink;
-    popupZoomImage.alt = imgName;
-    popupZoomTitle.textContent = imgName;
-  });
-  
-  return cardElement;
+function prependImageToPage(pubName, pubPhotoLink) {
+  const publication = new Card(pubName, pubPhotoLink);
+  publicationsNodes.prepend(publication.getReadyCardInstance());
 }
 
 function addInitPubsToPage(pubArr) {
@@ -103,18 +102,14 @@ function addInitPubsToPage(pubArr) {
   });
 }
 
-function copyTemplateContent(template) { // (returns templateCopy)
-  return template.content.cloneNode(true);
-}
-
-function openPopup(popup) {
+export function openPopup(popup) {
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', closePopupIfEscPressed);
   popup.addEventListener('click', closePopupIfOutsidePopupClicked);
 }
 
 
-function closePopup(popup) {
+export function closePopup(popup) {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', closePopupIfEscPressed);
   popup.removeEventListener('click', closePopupIfOutsidePopupClicked);
@@ -131,7 +126,6 @@ function closePopupIfOutsidePopupClicked(event) {
     closePopup(event.target);
   }
 }
-
 
 function handleFormSubmitEditProfile(evt) {
   // This funct. closes form and changes profile__title and profile__subtitle with input values.
@@ -151,23 +145,30 @@ function handleFormSubmitAddNewPlace(evt) {
     prependImageToPage(pubInputName.value, pubInputLink.value);
     closePopup(popupNewPlace);
     addNewPlaceFormElement.reset();
-    toggleButtonState(newPlaceSaveButton, addNewPlaceFormElement.checkValidity(), validationConfig);
+
+    formsObj['add-new-publication'].toggleButtonState();
 }
 
 addNewPlaceFormElement.addEventListener('submit', handleFormSubmitAddNewPlace);
 
 editButton.addEventListener('click', () => {
+  const thisFormInstance = formsObj['edit-profile'];
+
   // To insert the modified data into the popup
   titleInput.value = profileTitle.textContent;
-  toggleInputErrorMsg(editProfileFormElement, titleInput, validationConfig);
+  thisFormInstance.toggleInputErrorMsg(titleInput);
   subtitleInput.value = profileSubtitle.textContent;
-  toggleInputErrorMsg(editProfileFormElement, subtitleInput, validationConfig);
+  thisFormInstance.toggleInputErrorMsg(subtitleInput);
+
+  thisFormInstance.toggleButtonState();
+
   openPopup(popupEditProfile);
 });
 
 addButton.addEventListener('click', () => {
   openPopup(popupNewPlace);
 });
+
 
 // closeButton is a Nodes collection, so this EventListener applies to every close button (X) on the page.
 closeButtonsNodes.forEach(iCloseButton => {
@@ -179,3 +180,6 @@ closeButtonsNodes.forEach(iCloseButton => {
 
 
 addInitPubsToPage(initialPublications);
+
+fillFormsObj();
+enableAllFormsValidation();
