@@ -19,7 +19,7 @@ export default class Card {
   }
 
   _createEmptyContentCard() { 
-    this._cardElement = this._cardTemplate.content.cloneNode(true);
+    this._cardElement = this._cardTemplate.content.querySelector('.publication').cloneNode(true);
     this._cardPhoto = this._cardElement.querySelector('.publication__photo');
     this._cardTitle = this._cardElement.querySelector('.publication__title');
     this._cardLikeButton = this._cardElement.querySelector('.publication__like-button');
@@ -51,12 +51,7 @@ export default class Card {
   }
 
   _deleteCard() {
-    this._cardPhoto.closest('.publication').remove();
-    // this._cardElement.remove();
-    // Объясните пожалуйста, почему пропадает вся вложенность this._cardElement, когда мы вызываем в слушателе событий.
-    // А в любом другом месте программы, он содержит элемент article
-    // Ну тогда по логике и к элементу this._cardPhoto нельзя обратится. То есть контент при этом я не теряю!
-    // Объясните пожалуйста!!
+    this._cardElement.remove();
   }
 
   _openPopupZoomImage() {

@@ -19,10 +19,6 @@ export default class FormValidator {
   };
 
   _setInputListener() {
-    this._formElement.addEventListener('submit', evt => {
-      evt.preventDefault;
-    });
-
     this._formInputElementsArr.forEach(iInput => {
       iInput.addEventListener('input', () => {
         this.toggleInputErrorMsg(iInput);
@@ -49,6 +45,14 @@ export default class FormValidator {
       this._formSubmitButtonElement.setAttribute('disabled', true);
     }
   };
+
+  resetValidation() {
+    this._formInputElementsArr.forEach(input => {
+      this._hideInputError(input)
+    })
+    this.toggleButtonState()
+  }
+
 
   _showInputError(inputElement) {
     // errorMsg is a span element with unic class name which mathes inputElement.id + "-error".

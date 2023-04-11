@@ -1,34 +1,7 @@
 import Card from './Card.js';
 import FormValidator from './FormValidator.js';
+import { initialPublications } from './dataBaseImitation.js';
 
-
-// This is a array of cards that appears on the page when first opened or reloaded.
-const initialPublications = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
 
 // variables related to #popup-edit-profile
 const popupEditProfile = document.querySelector('#popup-edit-profile');
@@ -53,14 +26,15 @@ export const popupZoom = document.querySelector('#popup-big-img');
 export const popupZoomImage = popupZoom.querySelector('.popup__image');
 export const popupZoomTitle = popupZoom.querySelector('.popup__pub-title');
 
+const popupsArr = Array.from(document.querySelectorAll('.popup'));
 const closeButtonsNodes = document.querySelectorAll('.popup__close-button');
 
 export const publicationsNodes = document.querySelector('.publications');
 export const publicationTemplate = document.querySelector('#publication-template');
 
-const formsObj = {
+const formsValidatorObj = {
   // example of this obj data struct: {formName: instance of class FormValidator}
-  // based on page current forms, keys of this obj after calling funct fillFormsObj() are following:
+  // based on page current forms, keys of this obj after calling funct fillFormsValidatorObj() are following:
   // {
     // add-new-publication: this instance class FormValidator,
     // edit-profile: this instance class FormValidator,
@@ -76,43 +50,45 @@ export const validationConfig = {
   errorClass: 'popup__input-error_shown'
 };
 
-function fillFormsObj() {
+function fillFormsValidatorObj() {
   const formArr = Array.from(document.querySelectorAll(validationConfig.formElement));
 
   formArr.forEach(iForm  => {
-  const formInstance = new FormValidator(validationConfig, iForm);
-  formsObj[iForm.name] = formInstance;
+  const iFormValidatorInstance = new FormValidator(validationConfig, iForm);
+  formsValidatorObj[iForm.name] = iFormValidatorInstance;
   });
 };
 
 function enableAllFormsValidation() {
-  for (const formNameKey in formsObj) {
-    formsObj[formNameKey].enableValidation();
+  for (const formNameKey in formsValidatorObj) {
+    formsValidatorObj[formNameKey].enableValidation();
   }
 }
 
-function prependImageToPage(pubName, pubPhotoLink) {
-  const publication = new Card(pubName, pubPhotoLink);
-  publicationsNodes.prepend(publication.getReadyCardInstance());
+function createNewPublication(pubName, pubPhotoLink) {
+  return new Card(pubName, pubPhotoLink).getReadyCardInstance();
+}
+
+function prependPublicationToPage(publication) {
+  publicationsNodes.prepend(publication);
 }
 
 function addInitPubsToPage(pubArr) {
   pubArr.forEach(iPublication => {
-    prependImageToPage(iPublication.name, iPublication.link);
+    const publication = createNewPublication(iPublication.name, iPublication.link);
+    prependPublicationToPage(publication);
   });
 }
 
 export function openPopup(popup) {
   popup.classList.add('popup_opened');
   document.addEventListener('keydown', closePopupIfEscPressed);
-  popup.addEventListener('click', closePopupIfOutsidePopupClicked);
 }
 
 
 export function closePopup(popup) {
   popup.classList.remove('popup_opened');
   document.removeEventListener('keydown', closePopupIfEscPressed);
-  popup.removeEventListener('click', closePopupIfOutsidePopupClicked);
 }
 
 function closePopupIfEscPressed(event) {
@@ -121,10 +97,18 @@ function closePopupIfEscPressed(event) {
   }
 }
 
-function closePopupIfOutsidePopupClicked(event) {
-  if (event.target.classList.contains('popup_opened')) {
+function handleClosePopupByClick(event) {
+  if (event.target === event.currentTarget) {
     closePopup(event.target);
+  } else if ( event.target.classList.contains('popup__close-button') || event.target.classList.contains('popup__img-close-button') ) {
+    closePopup(event.target.closest('.popup'));
   }
+}
+
+function setCloseByClickListener() {
+  popupsArr.forEach((iPopup) => {
+    iPopup.addEventListener('click', handleClosePopupByClick)
+  }) 
 }
 
 function handleFormSubmitEditProfile(evt) {
@@ -142,17 +126,19 @@ function handleFormSubmitAddNewPlace(evt) {
     // This funct. closes form and addes new publication (place) with input values.
     evt.preventDefault();
 
-    prependImageToPage(pubInputName.value, pubInputLink.value);
+    const newPlace = createNewPublication(pubInputName.value, pubInputLink.value);
+    prependPublicationToPage(newPlace);
+
     closePopup(popupNewPlace);
     addNewPlaceFormElement.reset();
 
-    formsObj['add-new-publication'].toggleButtonState();
+    formsValidatorObj['add-new-publication'].toggleButtonState();
 }
 
 addNewPlaceFormElement.addEventListener('submit', handleFormSubmitAddNewPlace);
 
 editButton.addEventListener('click', () => {
-  const thisFormInstance = formsObj['edit-profile'];
+  const thisFormInstance = formsValidatorObj['edit-profile'];
 
   // To insert the modified data into the popup
   titleInput.value = profileTitle.textContent;
@@ -169,17 +155,9 @@ addButton.addEventListener('click', () => {
   openPopup(popupNewPlace);
 });
 
-
-// closeButton is a Nodes collection, so this EventListener applies to every close button (X) on the page.
-closeButtonsNodes.forEach(iCloseButton => {
-  const closestPopup = iCloseButton.closest('.popup');
-  iCloseButton.addEventListener('click', () => {
-    closePopup(closestPopup);
-  });
-});
-
-
 addInitPubsToPage(initialPublications);
 
-fillFormsObj();
+setCloseByClickListener();
+
+fillFormsValidatorObj();
 enableAllFormsValidation();
