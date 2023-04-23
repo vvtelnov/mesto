@@ -4,19 +4,18 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="./pages/index.css">
 	<title>Profile</title>
 </head>
 <body class="page">
 
 	<header class="header">
-		<img class="header__logo" src="./images/mesto-logo.svg" alt="Место">
+		<img class="header__logo" src="<%=require('./images/mesto-logo.svg')%>" alt="Место">
 	</header>
 
 	<main>
 		<section class="profile">
 			<div class="profile__info">
-				<img class="profile__avatar" src="images/profile-avatar.jpg" alt="Аватар">
+				<img class="profile__avatar" src="<%=require('./images/profile-avatar.jpg')%>" alt="Аватар">
 				<div class="profile__description">
 					<h1 class="profile__title">Жак-Ив Кусто</h1>
 					<p class="profile__subtitle">Исследователь океана</p>
@@ -37,7 +36,7 @@
 
 	<div id="popup-edit-profile" class="popup">
 		<div class="popup__container">
-			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="./images/close-icon.svg" alt="Х"></button>
+			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="<%=require('./images/close-icon.svg')%>" alt="Х"></button>
 			<h2 class="popup__title">Редактировать профиль</h2>
 			<form name="edit-profile" class="popup__form" novalidate>
 				<fieldset class="popup__edit-form-container">
@@ -60,7 +59,7 @@
 
 	<div id="popup-new-place" class="popup">
 		<div class="popup__container">
-			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="./images/close-icon.svg" alt="Х"></button>
+			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="<%=require('./images/close-icon.svg')%>" alt="Х"></button>
 			<h2 class="popup__title">Новое место</h2>
 			<form name="add-new-publication" class="popup__form" novalidate>
 				<fieldset class="popup__edit-form-container">
@@ -83,7 +82,7 @@
 
 	<div id="popup-big-img" class="popup popup_zoom-img">
 		<div class="popup__zoom-container">
-			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="./images/close-icon.svg" alt="Х"></button>
+			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="<%=require('./images/close-icon.svg')%>" alt="Х"></button>
 			<img class="popup__image" src="#" alt="Фото в профиле">
 			<h2 class="popup__pub-title"></h2>
 		</div>
@@ -101,6 +100,5 @@
 		</article>
 	</template>
 	
-	<script type="module" src="./scripts/index.js"></script>
 </body>
 </html>
