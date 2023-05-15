@@ -1,6 +1,8 @@
-import Card from './Card.js';
-import FormValidator from './FormValidator.js';
-import { initialPublications } from './dataBaseImitation.js';
+import './index.css';
+
+import Card from '../components/Card.js';
+import FormValidator from '../components/FormValidator.js';
+import { initialPublications } from '../utils/dataBaseImitation.js';
 
 
 // variables related to #popup-edit-profile
