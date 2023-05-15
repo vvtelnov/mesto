@@ -1,10 +1,11 @@
-import { publicationsNodes, publicationTemplate, popupZoom, popupZoomImage, popupZoomTitle, openPopup, closePopup } from '../pages/index.js'
+// import { publicationsNodes, publicationTemplate, popupZoom, popupZoomImage, popupZoomTitle, openPopup, closePopup } from '../pages/index.js'
 
 export default class Card {
-  constructor(imgName, imgLink) {
+  constructor(imgName, imgLink, cardTemplate, handleCardClick) {
     this._imgName = String(imgName);
     this._imgLink = String(imgLink);
-    this._cardTemplate = document.querySelector('#publication-template');
+    this._cardTemplate = document.querySelector(cardTemplate);
+    this._handleCardClick = handleCardClick;
     this._createContentCard(); // create ready this._cardElement;
   }
 
@@ -55,9 +56,6 @@ export default class Card {
   }
 
   _openPopupZoomImage() {
-    openPopup(popupZoom);
-    popupZoomImage.src = this._imgLink;
-    popupZoomImage.alt = this._imgName;
-    popupZoomTitle.textContent = this._imgName;
+    this._handleCardClick(this._imgName, this._imgLink);
   }
 }

@@ -25,3 +25,14 @@ export const initialPublications = [
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
   }
 ];
+
+
+// Массив здесь это иммитация что у нас не один юзер. То есть каждый новый юзер добавляется в конец мессива.
+// Тогда у каждого последующего юзера индекс на 1 будет больше.
+// Пусть индекс юзера в данном массиве - это его id.  
+export const initialUsersInfo = [
+  {
+    name: 'Жак-Ив Кусто',
+    profession: 'Исследователь океана',
+  }
+]
