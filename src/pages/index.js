@@ -1,8 +1,15 @@
 import './index.css';
 
+import Section from '../components/Section.js';
 import Card from '../components/Card.js';
+import Popup from '../components/Popup.js';
+import PopupWithForm from '../components/PopupWithForm';
+import PopupWithImage from '../components/PopupWithImage';
+import UserInfo from '../components/UserInfo';
 import FormValidator from '../components/FormValidator.js';
-import { initialPublications } from '../utils/dataBaseImitation.js';
+import { initialPublications, initialUsersInfo } from '../utils/dataBaseImitation.js';
+import { getInitialPublications, getInitialUsersInfo } from '../utils/requestFromDB.js';
+import bringGetUserInfoReturnToIdFormat from '../utils/GetObjectWithUserData';
 
 
 // variables related to #popup-edit-profile
@@ -52,6 +59,10 @@ export const validationConfig = {
   errorClass: 'popup__input-error_shown'
 };
 
+
+
+
+
 function fillFormsValidatorObj() {
   const formArr = Array.from(document.querySelectorAll(validationConfig.formElement));
 
@@ -67,99 +78,55 @@ function enableAllFormsValidation() {
   }
 }
 
-function createNewPublication(pubName, pubPhotoLink) {
-  return new Card(pubName, pubPhotoLink).getReadyCardInstance();
+function handleFormSubmitEditProfile({ 'profile-title-input': name, 'profile-subtitle-input': profession }) {
+  // Destructuring object with ALL #popup-edit-profile form's inputs
+  // This funct. changes profile__title and profile__subtitle with input values.
+  userInfoInst.setUserInfo(name, profession);
 }
 
-function prependPublicationToPage(publication) {
-  publicationsNodes.prepend(publication);
-}
-
-function addInitPubsToPage(pubArr) {
-  pubArr.forEach(iPublication => {
-    const publication = createNewPublication(iPublication.name, iPublication.link);
-    prependPublicationToPage(publication);
+function handleFormSubmitAddNewPlace({ 'new-pub-name': name, 'new-pub-link': link }) {
+  // Destructuring object with ALL #popup-new-place form's inputs
+  // This funct. addes new publication (place) with input values.
+  publicationSection.prependItemToPage({
+    'name': name,
+    'link': link
   });
+  formsValidatorObj['add-new-publication'].toggleButtonState();
 }
 
-export function openPopup(popup) {
-  popup.classList.add('popup_opened');
-  document.addEventListener('keydown', closePopupIfEscPressed);
+function handleCardClick(imgName, imgLink) {
+  popupWithImageInst.open(imgName, imgLink)
 }
 
-
-export function closePopup(popup) {
-  popup.classList.remove('popup_opened');
-  document.removeEventListener('keydown', closePopupIfEscPressed);
-}
-
-function closePopupIfEscPressed(event) {
-  if (event.key === 'Escape' || event.key === 'Esc')  {
-    closePopup(document.querySelector('.popup_opened'));
-  }
-}
-
-function handleClosePopupByClick(event) {
-  if (event.target === event.currentTarget) {
-    closePopup(event.target);
-  } else if ( event.target.classList.contains('popup__close-button') || event.target.classList.contains('popup__img-close-button') ) {
-    closePopup(event.target.closest('.popup'));
-  }
-}
-
-function setCloseByClickListener() {
-  popupsArr.forEach((iPopup) => {
-    iPopup.addEventListener('click', handleClosePopupByClick)
-  }) 
-}
-
-function handleFormSubmitEditProfile(evt) {
-  // This funct. closes form and changes profile__title and profile__subtitle with input values.
-  evt.preventDefault();
-  
-  profileTitle.textContent = titleInput.value;
-  profileSubtitle.textContent = subtitleInput.value;
-  closePopup(popupEditProfile);
-}
-
-editProfileFormElement.addEventListener('submit', handleFormSubmitEditProfile);
-
-function handleFormSubmitAddNewPlace(evt) {
-    // This funct. closes form and addes new publication (place) with input values.
-    evt.preventDefault();
-
-    const newPlace = createNewPublication(pubInputName.value, pubInputLink.value);
-    prependPublicationToPage(newPlace);
-
-    closePopup(popupNewPlace);
-    addNewPlaceFormElement.reset();
-
-    formsValidatorObj['add-new-publication'].toggleButtonState();
-}
-
-addNewPlaceFormElement.addEventListener('submit', handleFormSubmitAddNewPlace);
-
-editButton.addEventListener('click', () => {
-  const thisFormInstance = formsValidatorObj['edit-profile'];
-
-  // To insert the modified data into the popup
-  titleInput.value = profileTitle.textContent;
-  thisFormInstance.toggleInputErrorMsg(titleInput);
-  subtitleInput.value = profileSubtitle.textContent;
-  thisFormInstance.toggleInputErrorMsg(subtitleInput);
-
-  thisFormInstance.toggleButtonState();
-
-  openPopup(popupEditProfile);
-});
-
-addButton.addEventListener('click', () => {
-  openPopup(popupNewPlace);
-});
-
-addInitPubsToPage(initialPublications);
-
-setCloseByClickListener();
 
 fillFormsValidatorObj();
 enableAllFormsValidation();
+
+// getInitialUsersInfo() is a function wich imitates process of getting user info from DB
+const userInfoInst = new UserInfo(getInitialUsersInfo());
+
+const popupEditProfileInst = new PopupWithForm('#popup-edit-profile', handleFormSubmitEditProfile);
+const popupNewPlaceInst = new PopupWithForm('#popup-new-place', handleFormSubmitAddNewPlace);
+const popupWithImageInst = new PopupWithImage('#popup-big-img', '.popup__image', '.popup__pub-title');
+
+// enableOpeningPopups
+editButton.addEventListener('click', () => popupEditProfileInst.openWithSpecifiedFormParam(
+  bringGetUserInfoReturnToIdFormat(userInfoInst.getUserInfo())
+));
+addButton.addEventListener('click', () => popupNewPlaceInst.open());
+// setting eventListeners (closing by click and form submit)
+popupEditProfileInst.setEventListeners();
+popupNewPlaceInst.setEventListeners();
+popupWithImageInst.setEventListeners();
+
+
+const publicationSection = new Section({
+  items: initialPublications,
+  renderer: item => {
+    return new Card(item.name, item.link, '#publication-template', handleCardClick).getReadyCardInstance();
+  }
+},
+'.publications');
+
+publicationSection.prependInitItemsToPage();
+
