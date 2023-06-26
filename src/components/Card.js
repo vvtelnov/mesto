@@ -1,5 +1,3 @@
-// import { publicationsNodes, publicationTemplate, popupZoom, popupZoomImage, popupZoomTitle, openPopup, closePopup } from '../pages/index.js'
-
 export default class Card {
   constructor(imgName, imgLink, cardTemplate, handleCardClick) {
     this._imgName = String(imgName);

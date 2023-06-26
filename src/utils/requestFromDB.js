@@ -1,6 +1,5 @@
 import { initialPublications, initialUsersInfo } from './dataBaseImitation.js';
 
-
 function getInitialPublications() {
   return initialPublications;
 }
