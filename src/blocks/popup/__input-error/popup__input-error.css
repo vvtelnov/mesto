@@ -1,6 +1,7 @@
 .popup__input-error {
   display: block;
   color: #FFFFFF;
+  min-height: 36px;
   font-family: 'Inter';
   font-style: normal;
   font-weight: 400;

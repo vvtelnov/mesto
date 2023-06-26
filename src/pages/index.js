@@ -11,7 +11,6 @@ import { initialPublications, initialUsersInfo } from '../utils/dataBaseImitatio
 import { getInitialPublications, getInitialUsersInfo } from '../utils/requestFromDB.js';
 import bringGetUserInfoReturnToIdFormat from '../utils/GetObjectWithUserData';
 
-
 // variables related to #popup-edit-profile
 const popupEditProfile = document.querySelector('#popup-edit-profile');
 const editButton = document.querySelector('.profile__edit-button');
@@ -38,8 +37,11 @@ export const popupZoomTitle = popupZoom.querySelector('.popup__pub-title');
 const popupsArr = Array.from(document.querySelectorAll('.popup'));
 const closeButtonsNodes = document.querySelectorAll('.popup__close-button');
 
-export const publicationsNodes = document.querySelector('.publications');
+export const publicationsNode = document.querySelector('.publications');
 export const publicationTemplate = document.querySelector('#publication-template');
+
+// getInitialUsersInfo() is a function wich imitates process of getting user info from DB
+const { name: initName, profession: initProfession } = getInitialUsersInfo();
 
 const formsValidatorObj = {
   // example of this obj data struct: {formName: instance of class FormValidator}
@@ -58,10 +60,6 @@ export const validationConfig = {
   inputErrorClass: 'popup__text-input-form_error-shown',
   errorClass: 'popup__input-error_shown'
 };
-
-
-
-
 
 function fillFormsValidatorObj() {
   const formArr = Array.from(document.querySelectorAll(validationConfig.formElement));
@@ -98,12 +96,11 @@ function handleCardClick(imgName, imgLink) {
   popupWithImageInst.open(imgName, imgLink)
 }
 
-
 fillFormsValidatorObj();
 enableAllFormsValidation();
 
-// getInitialUsersInfo() is a function wich imitates process of getting user info from DB
-const userInfoInst = new UserInfo(getInitialUsersInfo());
+const userInfoInst = new UserInfo();
+userInfoInst.setUserInfo(initName, initProfession);
 
 const popupEditProfileInst = new PopupWithForm('#popup-edit-profile', handleFormSubmitEditProfile);
 const popupNewPlaceInst = new PopupWithForm('#popup-new-place', handleFormSubmitAddNewPlace);
@@ -119,7 +116,6 @@ popupEditProfileInst.setEventListeners();
 popupNewPlaceInst.setEventListeners();
 popupWithImageInst.setEventListeners();
 
-
 const publicationSection = new Section({
   items: initialPublications,
   renderer: item => {
@@ -129,4 +125,3 @@ const publicationSection = new Section({
 '.publications');
 
 publicationSection.prependInitItemsToPage();
-

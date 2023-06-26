@@ -6,11 +6,6 @@ export default class FormValidator {
     // form elements
     this._formInputElementsArr = Array.from(this._formElement.querySelectorAll(this._config.inputElement));
     this._formSubmitButtonElement = this._formElement.querySelectorAll(this._config.buttonElement)[0];
-
-    // form elemtnts class for showing errors or deactivating submit button
-    // this._inactiveButtonClass = this._config.inactiveButtonClass;
-    // this._inputErrorClass = this._config.inputErrorClass;
-    // this._errorClass = this._config.errorClass;
   }
 
   enableValidation() {
@@ -26,7 +21,6 @@ export default class FormValidator {
       });
     });
   };
-
 
   toggleInputErrorMsg(inputElement) {
     if (inputElement.validity.valid) {
@@ -52,7 +46,6 @@ export default class FormValidator {
     })
     this.toggleButtonState()
   }
-
 
   _showInputError(inputElement) {
     // errorMsg is a span element with unic class name which mathes inputElement.id + "-error".
