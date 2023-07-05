@@ -40,7 +40,9 @@ export default class PopupWithForm extends Popup {
   }
 
   openWithSpecifiedFormParam(param) {
-    this._setInputValues(param);
-    this.open();
+    if (param) {
+      this._setInputValues(param);
+      this.open();
+    }
   }
 }
