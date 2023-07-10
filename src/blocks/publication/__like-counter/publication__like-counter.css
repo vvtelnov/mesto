@@ -1,0 +1,8 @@
+.publication__like-counter {
+  color: rgb(0, 0, 0);
+  margin: 3px auto 0;
+  min-height: 13px;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 15.73px;
+}
