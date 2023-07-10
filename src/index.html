@@ -15,7 +15,9 @@
 	<main>
 		<section class="profile">
 			<div class="profile__info">
-				<img class="profile__avatar" src="<%=require('./images/profile-avatar.jpg')%>" alt="Аватар">
+				<div class="profile__avatar-container">
+					<img class="profile__avatar" src="" alt="Аватар">
+				</div>
 				<div class="profile__description">
 					<h1 class="profile__title"></h1>
 					<p class="profile__subtitle"></p>
@@ -43,12 +45,30 @@
 					
 					<lable class="popup__form-field">
 						<input name="profile-title" required minlength="2" maxlength="40" placeholder="Ваше имя" id="profile-title-input" type="text" class="popup__text-input-form" value="">
-						<span class="profile-title-input-error popup__input-error">привет, я ошибка</span>
+						<span class="profile-title-input-error popup__input-error"></span>
 					</lable>
 					
 					<lable class="popup__form-field">
 						<input name="profile-subtitle" required minlength="2" maxlength="200" placeholder="Ваша професия" id="profile-subtitle-input" type="text" class="popup__text-input-form" value="">
-						<span class="profile-subtitle-input-error popup__input-error">привет, я ошибка</span>
+						<span class="profile-subtitle-input-error popup__input-error"></span>
+					</lable>
+					
+					<button name="profile-save-button" type="submit" class="popup__save-button">Сохранить</button>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	<div id="popup-edit-avatar" class="popup">
+		<div class="popup__container">
+			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="<%=require('./images/close-icon.svg')%>" alt="Х"></button>
+			<h2 class="popup__title">Обновить аватар</h2>
+			<form name="edit-avatar" class="popup__form" novalidate>
+				<fieldset class="popup__edit-form-container">
+					
+					<lable class="popup__form-field">
+						<input name="avatar-img-link" required type="url" placeholder="Ссылка на аватар" id="avatar-link" type="text" class="popup__text-input-form" value="">
+						<span class="avatar-link-error popup__input-error"></span>
 					</lable>
 					
 					<button name="profile-save-button" type="submit" class="popup__save-button">Сохранить</button>
@@ -66,15 +86,27 @@
 					
 					<lable class="popup__form-field">
 						<input name="publication-name" required minlength="2" maxlength="30" placeholder="Название" id="new-pub-name" type="text" class="popup__text-input-form" value="">
-						<span class="new-pub-name-error popup__input-error">привет, я ошибка</span>
+						<span class="new-pub-name-error popup__input-error"></span>
 					</lable>
 					
 					<lable class="popup__form-field">
 						<input name="publication-img-link" required type="url" placeholder="Ссылка на картинку" id="new-pub-link" class="popup__text-input-form" value="">
-						<span class="new-pub-link-error popup__input-error">привет, я ошибка</span>
+						<span class="new-pub-link-error popup__input-error"></span>
 					</lable>
 
 					<button name="publication-create-button" type="submit" class="popup__save-button">Создать</button>
+				</fieldset>
+			</form>
+		</div>
+	</div>
+
+	<div id="popup-confirm-delete" class="popup">
+		<div class="popup__container">
+			<button type="button" class="popup__close-button"><img class="popup__img-close-button" src="<%=require('./images/close-icon.svg')%>" alt="Х"></button>
+			<h2 class="popup__title">Вы уверены?</h2>
+			<form name="confirm-delete" class="popup__form" novalidate>
+				<fieldset class="popup__edit-form-container">
+					<button name="confirm-delete-button" type="submit" class="popup__save-button popup__save-button_delete">Да</button>
 				</fieldset>
 			</form>
 		</div>
@@ -94,7 +126,10 @@
 			<img class="publication__photo" src="#" alt="Фото в профиле">
 			<div class="publication__info">
 				<h2 class="publication__title"></h2>
-				<button type="button" class="publication__like-button"></button>
+				<div class="publication__like-container">
+					<button type="button" class="publication__like-button"></button>
+					<p class="publication__like-counter">0</p>
+				</div>
 			</div>
 			<button type="button" class="publication__delete-button"><img></button>
 		</article>

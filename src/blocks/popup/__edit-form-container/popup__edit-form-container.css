@@ -2,15 +2,16 @@
   margin: 0 auto 37px;
   padding: 0;
   width: 358px;
-  min-height: 182px;
+  /* min-height: 182px; */
+  min-height: 0;
+
   border: none;
-  
 }
 
 @media screen and (max-width: 628px) {
   .popup__edit-form-container {
     width: 238px;
-    height: 175px;
+    min-height: 0;
     margin-bottom: 25px;
   }
 }

@@ -21,6 +21,10 @@ export default class Section {
     })
   }
 
+  al() {
+    alert('работаеt')
+  }
+
   appendItemToPage(item) {
     this._container.append(this._renderer(item));
   }
