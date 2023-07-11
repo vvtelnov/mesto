@@ -1,143 +1,78 @@
 export default class Api {
   constructor({ token, groupId }) {
+    this._baseUrl = 'https://mesto.nomoreparties.co/v1/'
     this._token = token;
     this._groupId = groupId;
+    this._fetchHeader = {
+      authorization: this._token,
+      'Content-Type': 'application/json',
+    }
   }
 
+  _getResponseData(res) {
+    if (!res.ok) {
+      return Promise.reject(`Ошибка: ${res.status}`);
+    }
+    return res.json();
+  } 
+
   getUserInfoFromDB() {
-    console.log('getUserInfoFromDB')
-    return fetch(`https://mesto.nomoreparties.co/v1/${this._groupId}/users/me`, {
-      headers: {
-        authorization: this._token,
-      },
+    return fetch(`${this._baseUrl}${this._groupId}/users/me`, {
+      headers: this._fetchHeader,
       method: 'GET',
     })
-    .then( res => {
-      if (res.ok) {
-        return res.json();
-      }
-      else {
-        throw new Error(res.status)
-      }
-    })
-    .catch( err => {
-      console.error(`Ошибка / ${err}`)
-    })
+    .then(this._getResponseData)
   }
 
   updateUserInfo(newName, newProfession) {
-    return fetch(`https://mesto.nomoreparties.co/v1/${this._groupId}/users/me`, {
-      headers: {
-        authorization: this._token,
-        'Content-Type': 'application/json',
-      },
+    return fetch(`${this._baseUrl}${this._groupId}/users/me`, {
+      headers: this._fetchHeader,
       method: 'PATCH',
       body: JSON.stringify({
         name: newName,
         about: newProfession,
       }),
     })
-    .then( res => {
-      if (res.ok) {
-        return res.json();
-      }
-      else {
-        throw new Error(res.status)
-      }
-    })
-    .catch( err => {
-      console.error(`Ошибка / ${err}`);
-      console.error('Не получается изменить профиль пользователя');
-    })
+    .then(this._getResponseData)
   }
 
   updateUserAvatar(newAvatarLink) {
-    return fetch(`https://mesto.nomoreparties.co/v1/${this._groupId}/users/me/avatar`, {
-      headers: {
-        authorization: this._token,
-        'Content-Type': 'application/json',
-      },
+    return fetch(`${this._baseUrl}${this._groupId}/users/me/avatar`, {
+      headers: this._fetchHeader,
       method: 'PATCH',
       body: JSON.stringify({
         avatar: newAvatarLink,
       }),
     })
-    .then( res => {
-      console.log(res)
-      if (res.ok) {
-        return res.json();
-      }
-      else {
-        throw new Error(res.status)
-      }
-    })
-    .catch( err => {
-      console.error(`Ошибка / ${err}`)
-      console.error('Не получается изменить аватар пользователя')
-    })
+    .then(this._getResponseData)
   }
 
   getCards() {
-    return fetch(`https://mesto.nomoreparties.co/v1/${this._groupId}/cards`, {
-      headers: {
-        authorization: this._token,
-      },
+    return fetch(`${this._baseUrl}${this._groupId}/cards`, {
+      headers: this._fetchHeader,
       method: 'GET',
     })
-    .then( res => {
-      if (res.ok) {
-        return res.json();
-      } 
-      else {
-        throw new Error(res.status)
-      }
-    })
-    .catch( err => {
-      console.error(`Ошибка / ${err}`)
-    });
+    .then(this._getResponseData)
   }
 
   postCard(name, link) {
-    return fetch(`https://mesto.nomoreparties.co/v1/${this._groupId}/cards`, {
-      headers: {
-        authorization: this._token,
-        'Content-Type': 'application/json',
-      },
+    return fetch(`${this._baseUrl}${this._groupId}/cards`, {
+      headers: this._fetchHeader,
       method: 'POST',
       body: JSON.stringify({
         name: name,
         link: link,
       }),
     })
-    .then( res => {
-      if (res.ok) {
-        return res.json();
-      }
-      else {
-        throw new Error(res.status)
-      }
-    })
-    .catch( err => {
-      console.error(`Ошибка / ${err}`)
-      console.error('Не получается загрузить новый пост')
-    })
+    .then(this._getResponseData)
   }
 
   likeCard(cardId) {
-    return fetch(`https://mesto.nomoreparties.co/v1/${this._groupId}/cards/${cardId}/likes`, {
-      headers: {
-        authorization: this._token,
-      },
+    return fetch(`${this._baseUrl}${this._groupId}/cards/${cardId}/likes`, {
+      headers: this._fetchHeader,
       method: 'PUT',
     })
-    .then( res => {
-      if (res.ok) {
-        return res.json();
-      }
-      else {
-        throw new Error(res.status)
-      }
-    })
+    .then(this._getResponseData)
     .then( postInfo => {
       return postInfo.likes.length;
     })
@@ -148,49 +83,21 @@ export default class Api {
   }
 
   removeCardLike(cardId) {
-    return fetch(`https://mesto.nomoreparties.co/v1/${this._groupId}/cards/${cardId}/likes`, {
-      headers: {
-        authorization: this._token,
-      },
+    return fetch(`${this._baseUrl}${this._groupId}/cards/${cardId}/likes`, {
+      headers: this._fetchHeader,
       method: 'DELETE',
     })
-    .then( res => {
-      if (res.ok) {
-        return res.json();
-      }
-      else {
-        throw new Error(res.status)
-      }
-    })
+    .then(this._getResponseData)
     .then( postInfo => {
       return postInfo.likes.length;
     })
-    .catch( err => {
-      console.error(`Ошибка / ${err}`)
-      console.error('Не получается убрать лайк')
-    });
   }
 
   deleteCard(cardId) {
-    return fetch(`https://mesto.nomoreparties.co/v1/${this._groupId}/cards/${cardId}`, {
-      headers: {
-        authorization: this._token,
-      },
+    return fetch(`${this._baseUrl}${this._groupId}/cards/${cardId}`, {
+      headers: this._fetchHeader,
       method: 'DELETE'
     })
-    .then( res => {
-      if (res.ok) {
-        return true;
-      }
-      else if (res.status === 403) {
-        Promise.reject('Нет прав!');
-      }
-      else {
-        Promise.reject();
-      } 
-    })
-    .catch( err => {
-      console.error(`Ошибка ${err}. (Не получается удалить пост)`)
-    })
+    .then(this._getResponseData)
   }
 }

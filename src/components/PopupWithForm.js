@@ -30,13 +30,10 @@ export default class PopupWithForm extends Popup {
   setEventListeners() {
     super.setEventListeners();
     this._form.addEventListener('submit', evt => {
+      this._changeSubmitBtnMessage(this._submitBtnText);
       evt.preventDefault();
-      this._submitBtn.textContent = this._submitBtnText;
       const inputValuesObj = this._getInputValues();
-      this._closeWithFormReset();
       this._formSubmitHandler(inputValuesObj);
-
-      this._submitBtn.textContent = this._defaultSubmitBtnText;
     });
   }
 
@@ -50,5 +47,13 @@ export default class PopupWithForm extends Popup {
       this._setInputValues(param);
       this.open();
     }
+  }
+
+  _changeSubmitBtnMessage(newMsg) {
+    this._submitBtn.textContent = newMsg;
+  }
+
+  setSubmitBtnMessageToDefaultValue() {
+    this._changeSubmitBtnMessage(this._defaultSubmitBtnText);
   }
 }
