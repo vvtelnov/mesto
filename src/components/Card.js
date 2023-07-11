@@ -30,6 +30,10 @@ export default class Card {
     return this._cardElement; 
   }
 
+  getCardId() {
+    return this._cardId;
+  }
+
   _createContentCard() {
     this._createEmptyContentCard();
     this._fillCardWithContent();
@@ -73,13 +77,16 @@ export default class Card {
     });
   }
 
-  _updLikesSection(nextState) {
+  _updLikesSection() {
     this._handleLikeCardClick(this._cardId, this._isLiked)
     .then(likesNumb => {
       this._isLiked = !this._isLiked;
       this._updLikesCounter(likesNumb);
       this._toggleLikeBtnState();
-    });
+    })
+    .catch( err => {
+      console.error(`${err} - (Не получается обработать нажатие на кнопку лайка)`)
+    })
   }
 
   _updLikesCounter(newLikesNumb) {
@@ -94,7 +101,15 @@ export default class Card {
   }
 
   _deleteCard() {
-    this._handleDeleteCard(this._cardElement, this._cardId);
+    this._handleDeleteCard(this);
+  }
+
+  deleteCardDom() {
+    if (this._canBeDeleted) {
+      this._cardElement.remove()
+    } else {
+      console.error('Ошибка, Данную карточку невозможно убрать со страницы')
+    }
   }
 
   _openPopupZoomImage() {

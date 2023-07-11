@@ -1,5 +1,6 @@
 export default class Section {
   constructor({ items, renderer }, containerSelector) {
+    console.log('section created!')
     this._initItems = items;
     this._renderer = renderer;
     this._container = document.querySelector(containerSelector);
@@ -19,10 +20,6 @@ export default class Section {
     this._initItems.forEach( item => {
       this.prependItemToPage(item);
     })
-  }
-
-  al() {
-    alert('работаеt')
   }
 
   appendItemToPage(item) {
