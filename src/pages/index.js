@@ -13,7 +13,11 @@ import bringGetUserInfoReturnToIdFormat from '../utils/GetObjectWithUserData';
 import reverseSortArray from '../utils/reverseArraySorting';
 
 const profileDom = document.querySelector('.profile')
+
 // variables related to #popup-edit-profile
+//Вообще, edit это существительное, которое становится прилагательным при использовании его перед другим существительным. 
+//Проблема фиксится добавлением артикля, но никогда в коде не видел, чтобы его использовали в названии переменной.
+// https://dictionary.cambridge.org/dictionary/english/edit
 const editButton = document.querySelector('.profile__edit-button');
 
 // variables related to #popup-edit-avatar
@@ -30,6 +34,9 @@ const formsValidatorObj = {
     // edit-profile: this instance class FormValidator,
   // }
 }
+
+let userId;
+let publicationSection;
 
 export const validationConfig = {
   formElement: '.popup__form',
@@ -76,14 +83,13 @@ function handleFormSubmitEditProfile({ 'profile-title-input': name, 'profile-sub
         userInfoInst.setUserInfo(updatedUserData.name, updatedUserData.about);
       }
       else {
-        //TODO:
         console.error('Не удается обновить данные пользователя')
       }
     })
     .catch( err => {
       console.error(`${err} (Не получается изменить профиль пользователя)`);
     })
-    .finally( () => {
+    .then( () => {
       this._closeWithFormReset();
       this.setSubmitBtnMessageToDefaultValue();
     })
@@ -105,40 +111,27 @@ function handleFormSubmitEditAvatar({'avatar-link': avatarLink}) {
     .catch( err => {
       console.error(`${err} (Не получается изменить аватар пользователя)`)
     })
-    .finally( () => {
+    .then( () => {
       this._closeWithFormReset();
       this.setSubmitBtnMessageToDefaultValue();
     })
 }
 
 function handleFormSubmitAddNewPlace({ 'new-pub-name': name, 'new-pub-link': link }) {
-  //Замечание: "
-  //1) Нам не нужно получать информацию о пользователе и о начальных карточках, чтобы добавить новую карточку. 
-  //2) Следует удалить данный блок then и выполнять сразу DOM функционал добавления карточки (строки 130 - 131)
-  //"
-
-  //Ответ: "
-  // 1) => если мы не получаем информацию о пользователя, то как нам взять его id?, что бы ставить лайки и удалять посты ? 
-  // 2) => если мы удалим блок then, тогда получается, что если на сервере ошибка (пост не прошел валидацию сервера и тд), то
-  // мы его не добавляем, а так мы его дабавляем на инстанс страницы юзера, а при перезагрузке, пост удалится.
-  // "
-
   // Destructuring object with ALL #popup-new-place form's inputs
   // This funct. addes new publication (place) with input values.
   api.postCard(name, link)
-  .then(post => {
-    publicationSection.then(pubSection => {
-      pubSection.prependItemToPage(post);
+    .then(post => {
+      publicationSection.prependItemToPage(post);
       formsValidatorObj['add-new-publication'].toggleButtonState();
     })
-  })
-  .catch( err => {
-    console.log(`${err} (Не получается загрузить новый пост)`)
-  })
-  .finally( () => {
-    this._closeWithFormReset();
-    this.setSubmitBtnMessageToDefaultValue();
-  })
+    .catch( err => {
+      console.log(`${err} (Не получается загрузить новый пост)`)
+    })
+    .then( () => {
+      this._closeWithFormReset();
+      this.setSubmitBtnMessageToDefaultValue();
+    })
 }
 
 function handleFormSubmitDeletePlace(cardInst) {
@@ -151,7 +144,7 @@ function handleFormSubmitDeletePlace(cardInst) {
   .catch( err => {
     console.log(`${err} (Возникла ошибка при удалении поста)`)
   })
-  .finally(() => {
+  .then(() => {
     this.close();
     this.setSubmitBtnMessageToDefaultValue();
   })
@@ -169,13 +162,20 @@ function handleCardLikeClick(cardId, prevStateIsLiked) {
   const isLiked = !prevStateIsLiked;
   if (isLiked) {
     return api.likeCard(cardId)
-    .then( likesNumb => {
-      return likesNumb;
+    .then( postInfo => {
+      return postInfo.likes.length;
+    })
+    .catch( err => {
+      console.error(`Ошибка / ${err} (Не получается поставить лайк)`);
+
     })
   } else {
     return api.removeCardLike(cardId)
-    .then( likesNumb => {
-      return likesNumb;
+    .then( postInfo => {
+      return postInfo.likes.length;
+    })
+    .catch( err => {
+      console.error(`Ошибка / ${err} (Не получается убрать лайк)`);
     })
   }
 }
@@ -203,12 +203,12 @@ popupNewPlaceInst.setEventListeners();
 popupConfimDeleteInst.setEventListeners();
 popupWithImageInst.setEventListeners();
 
-const publicationSection = Promise.all([
+Promise.all([
   api.getUserInfoFromDB(),
   api.getCards()
 ]).then(values => {
   const userData = values[0];
-  const userId = userData._id;
+  userId = userData._id;
   const cards = values[1];
   reverseSortArray(cards);
 
@@ -224,29 +224,19 @@ const publicationSection = Promise.all([
   }
 
   // creating section with posts, inserting it to the page
-  const publicationSection = new Section({
-    // Замечение: "
-    // 1) Экземпляр следует объявить глобально через let, чтобы присвоить здесь ему значение и затем использовать на строке 130.
-    // 2) Контейнер карточек - статичный элемент страницы в единственном экземпляре. Мы должны работать с ним с помощью одного экземпляра Section и не дублировать его создание"
-    // "
-    //
-    // Ответ: "
-    // 1) А какая разница здесь через let или const объявлять ? У них одинаковая область видимости, частично экземпляры класса Section мы изменять и так можем, а зачем нам его полностью перезаписывать ? 
-    // 2) => мы и так работаем с помощью одного экземпляра Section и не дублируем его создание
-    //"
-
+  publicationSection = new Section({
     items: cards,
     renderer: item => {
       return new Card({
         imgName: item.name, 
-        imgLink: item.link, 
+        imgLink: item.link,
         likes: item.likes.length,
         isLiked: item.likes.find(user => user._id === userId),
         cardId: item._id,
         userId: userId,
         canBeDeleted: item.owner._id === userId,
-        cardTemplate: '#publication-template', 
-        handleCardClick: handleCardClick, 
+        cardTemplate: '#publication-template',
+        handleCardClick: handleCardClick,
         handleDeleteCard: handleCardDeleteClick,
         handleLikeCard: handleCardLikeClick,
       }).getReadyCardInstance();
@@ -254,9 +244,9 @@ const publicationSection = Promise.all([
   },
   '.publications')
   publicationSection.prependInitItemsToPage();
-
-  return publicationSection
 })
 .catch( err => {
   console.error(`Ошибка / ${err}`)
 })
+
+console.log('userId', userId) // undefined
