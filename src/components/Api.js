@@ -73,13 +73,6 @@ export default class Api {
       method: 'PUT',
     })
     .then(this._getResponseData)
-    .then( postInfo => {
-      return postInfo.likes.length;
-    })
-    .catch( err => {
-      console.error(`Ошибка / ${err}`)
-      console.error('Не получается поставить лайк')
-    });
   }
 
   removeCardLike(cardId) {
@@ -88,9 +81,6 @@ export default class Api {
       method: 'DELETE',
     })
     .then(this._getResponseData)
-    .then( postInfo => {
-      return postInfo.likes.length;
-    })
   }
 
   deleteCard(cardId) {
