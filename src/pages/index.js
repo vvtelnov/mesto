@@ -15,9 +15,6 @@ import reverseSortArray from '../utils/reverseArraySorting';
 const profileDom = document.querySelector('.profile')
 
 // variables related to #popup-edit-profile
-//Вообще, edit это существительное, которое становится прилагательным при использовании его перед другим существительным. 
-//Проблема фиксится добавлением артикля, но никогда в коде не видел, чтобы его использовали в названии переменной.
-// https://dictionary.cambridge.org/dictionary/english/edit
 const editButton = document.querySelector('.profile__edit-button');
 
 // variables related to #popup-edit-avatar
@@ -81,6 +78,8 @@ function handleFormSubmitEditProfile({ 'profile-title-input': name, 'profile-sub
     .then(updatedUserData => {
       if (updatedUserData) {
         userInfoInst.setUserInfo(updatedUserData.name, updatedUserData.about);
+        this.closeWithFormReset();
+        this.setSubmitBtnMessageToDefaultValue();
       }
       else {
         console.error('Не удается обновить данные пользователя')
@@ -88,10 +87,6 @@ function handleFormSubmitEditProfile({ 'profile-title-input': name, 'profile-sub
     })
     .catch( err => {
       console.error(`${err} (Не получается изменить профиль пользователя)`);
-    })
-    .then( () => {
-      this._closeWithFormReset();
-      this.setSubmitBtnMessageToDefaultValue();
     })
 }
 
@@ -102,18 +97,15 @@ function handleFormSubmitEditAvatar({'avatar-link': avatarLink}) {
     .then(updatedUserData => {
       if (updatedUserData) {
         userInfoInst.setUserAvatar(updatedUserData.avatar);
+        this.closeWithFormReset();
+        this.setSubmitBtnMessageToDefaultValue();
       }
       else {
-        //TODO:
         console.error('Не удается обновить аватар пользователя')
       }
     })
     .catch( err => {
       console.error(`${err} (Не получается изменить аватар пользователя)`)
-    })
-    .then( () => {
-      this._closeWithFormReset();
-      this.setSubmitBtnMessageToDefaultValue();
     })
 }
 
@@ -124,13 +116,11 @@ function handleFormSubmitAddNewPlace({ 'new-pub-name': name, 'new-pub-link': lin
     .then(post => {
       publicationSection.prependItemToPage(post);
       formsValidatorObj['add-new-publication'].toggleButtonState();
+      this.closeWithFormReset();
+      this.setSubmitBtnMessageToDefaultValue();
     })
     .catch( err => {
       console.log(`${err} (Не получается загрузить новый пост)`)
-    })
-    .then( () => {
-      this._closeWithFormReset();
-      this.setSubmitBtnMessageToDefaultValue();
     })
 }
 
@@ -139,14 +129,12 @@ function handleFormSubmitDeletePlace(cardInst) {
   .then( (isPermitionGranted) => {
     if (isPermitionGranted) {
       cardInst.deleteCardDom();
+      this.close();
+      this.setSubmitBtnMessageToDefaultValue();
     }
   })
   .catch( err => {
     console.log(`${err} (Возникла ошибка при удалении поста)`)
-  })
-  .then(() => {
-    this.close();
-    this.setSubmitBtnMessageToDefaultValue();
   })
 }
 
@@ -248,5 +236,3 @@ Promise.all([
 .catch( err => {
   console.error(`Ошибка / ${err}`)
 })
-
-console.log('userId', userId) // undefined
